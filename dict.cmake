@@ -17,7 +17,9 @@ function(dict command dict )
 
         dict(_IDX ${dict} "${arg_key}" idx)
         if(idx STREQUAL -1)
-            message(FATAL_ERROR "No key \"${arg_key}\" in dictionary")
+            # message(FATAL_ERROR "No key \"${arg_key}\" in dictionary")
+            set(${arg_outvar} "" PARENT_SCOPE)
+            return()
         endif()
 
         list(GET ${dict} ${idx} kv)
