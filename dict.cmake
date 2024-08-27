@@ -15,7 +15,6 @@ function(dict command dict )
         if("${arg_value}" MATCHES ";")
             # Change the ; to a :
             string(REPLACE ";" ":" arg_value "${arg_value}")
-            message("list, therefore replace")
         endif()
 
         list(APPEND ${dict} "${arg_key}=${arg_value}")
@@ -27,7 +26,6 @@ function(dict command dict )
 
         dict(_IDX ${dict} "${arg_key}" idx)
         if(idx STREQUAL -1)
-            # message(FATAL_ERROR "No key \"${arg_key}\" in dictionary")
             set(${arg_outvar} "" PARENT_SCOPE)
             return()
         endif()
