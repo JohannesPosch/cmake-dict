@@ -42,10 +42,7 @@ message(STATUS "Username: ${username_var}")
 In this example, the variable **username_var** will hold the value **"john_doe"**, and the message **Username: john_doe** will be printed.
 
 ### Handling Lists in the Dictionary
-The dictionary can also store CMake lists as values. When setting a list, the semicolons (`;`) used to separate elements in a CMake list are automatically replaced with colons (`:`) during storage. This allows the list to be stored as a single string while preserving its structure.
-
-> [!IMPORTANT]  
-> The colon might not be contained in the original data, because it would be changed on get.
+The dictionary can also store CMake lists as values. When setting a list, the semicolons (`;`) used to separate elements in a CMake list are automatically replaced with colons (`:`) during storage. All colons(`:`) get escaped for the duration of storing them as (`\:`) This allows the list to be stored as a single string while preserving its structure.
 
 ~~~ cmake
 # Define a list

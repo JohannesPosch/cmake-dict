@@ -8,10 +8,14 @@ function(dict command dict )
             list(REMOVE_AT ${dict} ${idx})
         endif()
         
+        # First replace all the : with \: to escape them
+        string(REPLACE ":" "\\:" arg_value "${arg_value}")
+
         # Check if the argument is a list, if so, change the ; to a : to store it in the dictionary
         if("${arg_value}" MATCHES ";")
             # Change the ; to a :
             string(REPLACE ";" ":" arg_value "${arg_value}")
+            message("list, therefore replace")
         endif()
 
         list(APPEND ${dict} "${arg_key}=${arg_value}")
@@ -31,11 +35,11 @@ function(dict command dict )
         list(GET ${dict} ${idx} kv)
         string(REGEX REPLACE "^[^=]+=(.*)" "\\1" value "${kv}")
         
-        # Check if the value is a list, if so, change the : to a ; to get it from the dictionary
-        if("${value}" MATCHES ":")
-            # Change the : to a ;
-            string(REPLACE ":" ";" value "${value}")
-        endif()
+        # Replace all the [^\]: with ;
+        string(REGEX REPLACE "([^\\]):" "\\1;" value ${value})
+
+        # Replace all the \: with :
+        string(REPLACE "\\:" ":" value "${value}")
         
         set(${arg_outvar} "${value}" PARENT_SCOPE)
 
