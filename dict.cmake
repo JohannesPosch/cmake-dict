@@ -7,6 +7,12 @@ function(dict command dict )
         if(NOT idx STREQUAL -1)
             list(REMOVE_AT ${dict} ${idx})
         endif()
+        
+        # Check if the argument is a list, if so, change the ; to a : to store it in the dictionary
+        if("${arg_value}" MATCHES ";")
+            # Change the ; to a :
+            string(REPLACE ";" ":" arg_value "${arg_value}")
+        endif()
 
         list(APPEND ${dict} "${arg_key}=${arg_value}")
         set(${dict} "${${dict}}" PARENT_SCOPE)
@@ -24,6 +30,13 @@ function(dict command dict )
 
         list(GET ${dict} ${idx} kv)
         string(REGEX REPLACE "^[^=]+=(.*)" "\\1" value "${kv}")
+        
+        # Check if the value is a list, if so, change the : to a ; to get it from the dictionary
+        if("${value}" MATCHES ":")
+            # Change the : to a ;
+            string(REPLACE ":" ";" value "${value}")
+        endif()
+        
         set(${arg_outvar} "${value}" PARENT_SCOPE)
 
     elseif(command STREQUAL _IDX)
