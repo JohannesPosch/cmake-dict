@@ -8,14 +8,8 @@ function(dict command dict )
             list(REMOVE_AT ${dict} ${idx})
         endif()
         
-        # First replace all the : with \: to escape them
-        string(REPLACE ":" "\\:" arg_value "${arg_value}")
-
-        # Check if the argument is a list, if so, change the ; to a : to store it in the dictionary
-        if("${arg_value}" MATCHES ";")
-            # Change the ; to a :
-            string(REPLACE ";" ":" arg_value "${arg_value}")
-        endif()
+        # Replace all semicolons with an escape secquence
+        string(REPLACE ";" "\n" arg_value "${arg_value}")
 
         list(APPEND ${dict} "${arg_key}=${arg_value}")
         set(${dict} "${${dict}}" PARENT_SCOPE)
@@ -33,11 +27,8 @@ function(dict command dict )
         list(GET ${dict} ${idx} kv)
         string(REGEX REPLACE "^[^=]+=(.*)" "\\1" value "${kv}")
         
-        # Replace all the [^\]: with ;
-        string(REGEX REPLACE "([^\\]):" "\\1;" value ${value})
-
-        # Replace all the \: with :
-        string(REPLACE "\\:" ":" value "${value}")
+        # Replace all newlines with semicolons
+        string(REPLACE "\n" ";" value "${value}")
         
         set(${arg_outvar} "${value}" PARENT_SCOPE)
 
